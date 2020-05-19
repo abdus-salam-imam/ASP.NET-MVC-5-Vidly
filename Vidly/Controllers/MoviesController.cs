@@ -9,6 +9,7 @@ using System.Data.Entity;
 
 namespace Vidly.Controllers
 {
+    
     public class MoviesController : Controller
     {
 
@@ -23,43 +24,18 @@ namespace Vidly.Controllers
         {
             _context.Dispose();
         }
-
-
-
-        // GET: Movies
-        public ActionResult Random()
-        {
-            var movie = new Movie() {Name="Dilwaly" };
-
-            var customers = new List<Customer>()
-            {
-
-                new Customer{Name="Customer 1"},
-                new Customer{Name="Customer 2"}
-
-
-            };
-
-            var viewModel = new RandomMovieViewModel()
-            {
-                Movie = movie,
-                Customers= customers
-
-
-            };
-
-            return View(viewModel);
-        }
-
-        
         public ActionResult Index()
         {
 
-            return View();
+            if (User.IsInRole(RoleName.CanManageMovies))
+                return View("List");
+                   return View ("ReadOnlyList");
+
+            
             
         }
 
-
+        [Authorize(Roles =RoleName.CanManageMovies)]
         public ActionResult New()
         {
             
@@ -146,9 +122,6 @@ namespace Vidly.Controllers
 
 
         }
-
-
-
 
         public ActionResult Details(int id)
         {
