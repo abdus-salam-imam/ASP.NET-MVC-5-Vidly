@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -55,8 +56,9 @@ namespace Vidly
             //   consumerSecret: "");
 
             app.UseFacebookAuthentication(
-               appId: "251767726067772",
-               appSecret: "ec81b3811afe0d46e2d11ec15c5a8a9b");
+             
+               appId: ConfigurationManager.AppSettings["FaceBookAppId"],
+               appSecret: ConfigurationManager.AppSettings["FaceBookAppSecret"]);
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{

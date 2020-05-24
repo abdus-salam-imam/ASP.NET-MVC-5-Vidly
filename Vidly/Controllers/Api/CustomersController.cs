@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Owin.Security.Provider;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -24,14 +25,20 @@ namespace Vidly.Controllers.Api
 
             //  Get/api/customers
             
-        public IHttpActionResult GetCustomers()
+        public IHttpActionResult GetCustomers(string query = null)
         {
 
-            return Ok( _context.Customers
-                .Include(c=>c.MembershipType)
-                .ToList()
-                .Select(Mapper.Map<Customer,CustomerDto>));
+            var customerquery = _context.Customers
+           .Include(c => c.MembershipType);
 
+                if(!String.IsNullOrWhiteSpace(query))
+                customerquery = customerquery.Where(c => c.Name.Contains(query));
+
+            var customerDto = customerquery
+                .ToList()
+                .Select(Mapper.Map<Customer,CustomerDto>);
+
+             return Ok(customerDto);
         }
 
         // Get  /api/customers/1
